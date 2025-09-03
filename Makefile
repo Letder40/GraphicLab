@@ -1,6 +1,6 @@
 CC = g++
-CFLAGS = -g -pedantic -Wall -Wextra --std=c++20
-LIBS = -lglfw -lGLEW -lGL 
+CFLAGS = -g -pedantic -Wall -Wextra --std=c++20 -Iinclude
+LIBS = -lglfw -lGLEW -lGL
 
 SRCDIR = src
 BUILDDIR = build
@@ -10,9 +10,10 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
 TARGET = $(BUILDDIR)/test_game
 
-.PHONY: run
-
 all: $(TARGET)
+	echo $(OBJECTS)
+
+.PHONY: run
 
 run: $(TARGET)
 	./$(TARGET)
@@ -20,9 +21,11 @@ run: $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CC) $(LIBS) $(CFLAGS) -o $@ $^
 
-$(OBJECTS): $(SOURCES)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+.PHONY: clean
 
 clean:
 	@rm -r build
