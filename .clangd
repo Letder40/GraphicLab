@@ -1,2 +1,8 @@
 CompileFlags:
-  Add: [-std=c++20, -Wall, -Wextra, -pedantic, -DCLANG_COMPLETE_ONLY, Iinclude]
+  Add: 
+    - -Iinclude
+    - -std=c++23
+    - -Wall
+    - -Wextra
+    - -pedantic
+    - -DCLANG_COMPLETE_ONLY

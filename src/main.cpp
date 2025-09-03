@@ -1,11 +1,10 @@
 #include "glLoader.h"
-#include <cstdio>
+#include <cstdint>
 
-#include "window/Window.h"
-#include "shaders/ShaderProgram.h"
-
+#include "globjects/shaders/ShaderProgram.h"
 #include "globjects/VertexArray.h"
 #include "globjects/GLBuffer.h"
+#include "globjects/Window.h"
 
 const float vertices[] = {
     0.5f,  0.5f, 0.0f,
@@ -19,46 +18,10 @@ const uint32_t indices[] = {
     1, 2, 3
 };
 
-struct Shaders {
-    const char* vertex_shader_src = R"(
-    #version 330 core
-    layout (location = 0) in vec3 aPos;
-
-    void main() {
-        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-    }
-    )";
-
-    const char* fragment_shader_src = R"(
-    #version 330 core
-    out vec4 FragColor;
-
-    void main() {
-        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-    }
-    )";
-
-    const char* fragment_shader2_src = R"(
-    #version 330 core
-    out vec4 FragColor;
-
-    void main() {
-        FragColor = vec4(0.0f, 0.0f, 0.8f, 1.0f);
-    }
-    )";
-};
-
-
 int main () {
     Window window(1920, 1080, "GraphicLab");
 
-#ifndef CLANG_COMPLETE_ONLY
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-        return -1;
-    }
-#endif
+    if (!init_GlLoader()) return 1;
 
     VertexArray vao;
     vao.bind();
@@ -69,9 +32,11 @@ int main () {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    Shaders shaders;
-    ShaderProgram shader_program(shaders.vertex_shader_src, shaders.fragment_shader_src);
-    ShaderProgram shader_program2(shaders.vertex_shader_src, shaders.fragment_shader2_src);
+    ShaderProgram shader_program_orange("shader.vert", "shader_orange.frag");
+    if (!shader_program_orange.compile()) return 1;
+
+    ShaderProgram shader_program_blue("shader.vert", "shader_blue.frag");
+    if (!shader_program_blue.compile()) return 1;
 
     while (!window.should_close()) {
         window.process_input();
@@ -80,15 +45,13 @@ int main () {
         glClear(GL_COLOR_BUFFER_BIT);
 
         vao.bind();
-        shader_program.use();
+        shader_program_orange.use();
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
-        shader_program2.use();
+        shader_program_blue.use();
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(sizeof(uint32_t) * 3));
 
         window.poll_events();
         window.swap_buffers();
     }
-
-    glfwTerminate();
 }

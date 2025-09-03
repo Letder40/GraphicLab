@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -g -pedantic -Wall -Wextra --std=c++20 -Iinclude
+CFLAGS = -g -pedantic -Wall -Wextra --std=c++23 -Iinclude
 LIBS = -lglfw -lGLEW -lGL
 
 SRCDIR = src
@@ -10,13 +10,15 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
 TARGET = $(BUILDDIR)/test_game
 
-all: $(TARGET)
-	echo $(OBJECTS)
+.PHONY: run clangd-config all
 
-.PHONY: run
+all: $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
+
+clangd-config:
+	bear -- make -B
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(LIBS) $(CFLAGS) -o $@ $^
