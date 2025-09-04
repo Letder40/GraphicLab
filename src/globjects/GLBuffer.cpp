@@ -4,9 +4,9 @@ GLBuffer::GLBuffer(GLenum type, size_t size, const void* data, GLenum usage) {
     this->type = type;
     glGenBuffers(1, &id);
     glBindBuffer(type, id);
-    glBufferData(type, size, data, usage);
+    glBufferData(type, size, (const void*)data, usage);
 }
 
-GLBuffer::~GLBuffer() { glDeleteBuffers(1, &id); };
+GLBuffer::~GLBuffer() { };
 
 void GLBuffer::bind() { glBindBuffer(type, id); };

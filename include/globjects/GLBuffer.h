@@ -1,5 +1,5 @@
-#ifndef VERTEX_ARRAY_H
-#define VERTEX_ARRAY_H
+#ifndef GLBUFFER_H
+#define GLBUFFER_H
 
 #include "glLoader.h"
 #include <cstddef>

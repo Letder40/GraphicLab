@@ -1,8 +1,8 @@
 #include "globjects/Window.h"
-
 #include <GLFW/glfw3.h>
-#include <cstdio>
+
 #include <cstdlib>
+#include <print>
 
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -12,13 +12,14 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 Window::Window(uint32_t width, uint32_t height, const char* title) {
     glfwInit();
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!window) {
-        fprintf(stderr, "Error: Failled to create a windows\n");
+        std::print(stderr, "Error: Failled to create a windows\n");
         glfwTerminate();
         exit(1);
     }
