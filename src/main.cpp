@@ -45,6 +45,9 @@ int main () {
         shader_program_orange.use();
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
+        shader_program_blue.use();
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(sizeof(float) * 3));
+
         window.poll_events();
         window.swap_buffers();
     }

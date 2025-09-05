@@ -14,7 +14,10 @@ VertexArray::VertexArray(VertexArray&& other) noexcept {
     other.id = 0;
 }
 
-VertexArray::~VertexArray() { glDeleteVertexArrays(1, &id); };
+VertexArray::~VertexArray() { 
+    glDeleteVertexArrays(1, &id); 
+    if (id != 0) std::print("cleaned VAO with id: {}\n", id);
+};
 
 void VertexArray::add_vbo(string_view name, uint32_t num_components_per_vertex, vector<float>&& data) {
     this->bind();
@@ -45,13 +48,16 @@ VertexArray&& VertexArray::with_ebo(vector<uint32_t>&& data) && {
     return std::move(*this);
 }
 
-optional<GLBuffer> VertexArray::get_vbo(string_view name) {
+optional<GLBuffer*> VertexArray::get_vbo(string_view name) {
     auto it = this->vertex_buffers.find(string(name));
 
     if (it == vertex_buffers.end()) return std::nullopt;
-    return it->second;
+    return &it->second;
 }
 
-optional<GLBuffer> VertexArray::get_ebo() { return this->element_buffer; };
+optional<GLBuffer*> VertexArray::get_ebo() { 
+    if (element_buffer.has_value()) return &this->element_buffer.value();
+    return std::nullopt; 
+};
 
-void VertexArray::bind() { std::print("vao id: {}\n", this->id); glBindVertexArray(id); };
+void VertexArray::bind() { glBindVertexArray(id); };

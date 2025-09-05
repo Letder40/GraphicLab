@@ -11,6 +11,8 @@ class GLBuffer {
 
     public:
         GLBuffer(GLenum type, size_t size, const void* data, GLenum usage);
+        GLBuffer(GLBuffer&& other) noexcept;
+        GLBuffer& operator=(GLBuffer&& other) noexcept;
         ~GLBuffer();
 
         void bind();

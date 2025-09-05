@@ -39,7 +39,7 @@ class VertexArray {
 
         void bind();
 
-        optional<GLBuffer> get_vbo(std::string_view name);
-        optional<GLBuffer> get_ebo();
+        optional<GLBuffer*> get_vbo(std::string_view name);
+        optional<GLBuffer*> get_ebo();
 };
 #endif
